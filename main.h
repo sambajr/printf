@@ -2,6 +2,7 @@
 #define PRINT_H
 
 int _printf(const char *format, ...);
-void _putchar(char c);
+int _putchar(char c);
+int _print_str(char *str);
 
 #endif

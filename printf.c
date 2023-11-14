@@ -1,6 +1,7 @@
-#include "main.h"
-#include <stdarg.h>
 #include <stdio.h>
+#include <stdarg.h>
+#include <stdlib.h>
+#include "main.h"
 /**
  *  * _printf - Custom printf function
  *   * @format: Format string containing directives
@@ -10,12 +11,9 @@
 int _printf(const char *format, ...)
 {
 	va_list args;
-	char c;
-	int count;
-	char *str;
+	int count = 0;
 
 	va_start(args, format);
-
 	while (*format != '\0')
 	{
 		if (*format == '%')
@@ -24,38 +22,24 @@ int _printf(const char *format, ...)
 			switch (*format)
 			{
 				case 'c':
-				{
-					c = va_arg(args, int);
-					_putchar(c);
-					count++;
+					count += _putchar(va_arg(args, int));
 					break;
-				}
 				case 's':
-				{
-					str = va_arg(args, char *);
-					while (*str != '\0')
-					{
-						_putchar(*str);
-						str++;
-						count++;
-					}
+					count += _print_str(va_arg(args, char *));
 					break;
-				}
 				case '%':
-				_putchar('%');
-				count++;
-				break;
+					count += _putchar('%');
+					break;
 				default:
-				break;
+					break;
 			}
 		}
 		else
 		{
-			_putchar(*format);
-			count++;
+			count += _putchar(*format);
 		}
 		format++;
 	}
 	va_end(args);
 	return (count);
-}								
+}
