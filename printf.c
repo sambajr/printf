@@ -1,6 +1,5 @@
-#include <stdio.h>
 #include <stdarg.h>
-#include <stdlib.h>
+#include <unistd.h>
 #include "main.h"
 /**
  *  * _printf - Custom printf function
@@ -11,9 +10,12 @@
 int _printf(const char *format, ...)
 {
 	va_list args;
-	int count = 0;
+	int count;
+	char c;
+	char *str;
 
 	va_start(args, format);
+	count = 0;
 	while (*format != '\0')
 	{
 		if (*format == '%')
@@ -22,26 +24,36 @@ int _printf(const char *format, ...)
 			switch (*format)
 			{
 				case 'c':
-					count += _putchar(va_arg(args, int));
-					break;
+					{
+						c = va_arg(args, int);
+						count += write(1, &c, 1);
+						break;
+					}
 				case 's':
-					count += _print_str(va_arg(args, char *));
-					break;
+					{
+						str = va_arg(args, char *);
+						while (*str != '\0')
+						{
+							count += write(1, str, 1);
+							str++;
+						}
+						break;
+					}
 				case '%':
-					_putchar('%');
-					count++;
+					count += write(1, "%", 1);
 					break;
 				default:
-					_putchar('%');
-					_putchar(*format);
+					write(1, "%", 1);
+					write(1, format, 1);
+					count += 2;
 					break;
 			}
 		}
 		else
 		{
-			count += _putchar(*format);
+			count += write(1, format, 1);
 		}
-		format++;
+			format++;
 	}
 	va_end(args);
 	return (count);
