@@ -1,4 +1,5 @@
 #include <stdarg.h>
+#include <stdio.h>
 #include <unistd.h>
 #include "main.h"
 /**
@@ -10,9 +11,10 @@
 int _printf(const char *format, ...)
 {
 	va_list args;
-	int count;
+	int count, num, len;
 	char c;
 	char *str;
+	char buffer[20];
 
 	va_start(args, format);
 	count = 0;
@@ -23,6 +25,14 @@ int _printf(const char *format, ...)
 			format++;
 			switch (*format)
 			{
+				case 'd':
+				case 'i':
+					{
+						num = va_arg(args, int);
+						len = sprintf(buffer, "%d", num);
+						count += write(1, buffer, len);
+						break;
+					}
 				case 'c':
 					{
 						c = va_arg(args, int);
