@@ -11,9 +11,11 @@
 int _printf(const char *format, ...)
 {
 	va_list args;
-	int count, num, len;
+	int i, count, num, len;
 	char c;
 	char *str;
+	char nuffer[32];
+	unsigned int bum;
 	char buffer[20];
 
 	va_start(args, format);
@@ -52,6 +54,25 @@ int _printf(const char *format, ...)
 				case '%':
 					count += write(1, "%", 1);
 					break;
+				case 'b': {
+						  bum = va_arg(args, unsigned int);
+						  i = 0;
+						  while (num > 0)
+						  {
+							  nuffer[i++] = (bum % 2) + '0';
+							  bum /= 2;
+						  }
+						  if (i == 0)
+						  {
+							  nuffer[i++] = '0';
+						  }
+						  i--;
+						  while (i >= 0)
+						  {
+							  count += write(1, &nuffer[i--], 1);
+						  }
+						  break;
+					  }
 				default:
 					write(1, "%", 1);
 					write(1, format, 1);
